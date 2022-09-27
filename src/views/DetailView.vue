@@ -1,15 +1,10 @@
 <template>
-    <!--<img alt="Vue logo" src="@/assets/logo.png">-->
-    <div class="about">
-        <h1>Todo Detail</h1>
-    </div>
+  <div class="about">
+    <h1>Todo Detail</h1>
+  </div>
   <section class="alert alert-primary">
-    <h1>{{ data.titleName }}</h1>
-    <p>{{ data.message }}</p>
-    <p>{{ data.title }}</p>
-    <p>{{ data.text }}</p>
-    <p>{{ data.isComplete }}</p>
-    <p>ID:{{ chosenId }}</p>
+    <h1>Axios</h1>
+    <p>{{data}}</p>
     <table class="table table-light table-striped">
       <tbody class="text-start">
         <tr>
@@ -22,11 +17,11 @@
         </tr>
         <tr>
           <th>Created</th>
-          <td>{{ data.json_data ? data.json_data.created : "-" }}</td>
+          <td>{{ data.created }}</td>
         </tr>
         <tr>
           <th>Modified</th>
-          <td>{{ data.json_data ? data.json_data.modified : "-" }}</td>
+          <td>{{ data.modified }}</td>
         </tr>
         <tr>
           <th>IsComplete</th>
@@ -39,75 +34,79 @@
 </template>
 
 <script lang="js">
-import router from "@/router";
-import axios from "axios";
-import { reactive, onMounted } from "vue";
-
-let url = "https://localhost:5001/api/todoitems/";
-
-export default {
-  props: {
-    chosenId: {
-      type: Number,
-      default: 0
-    }
-  },
-  setup(props) {
-    const data = reactive({
-      titleName: "Axios",
-      message: "This is axios sample.",
-      json_data: null,
-
-      // id: 1, //id番号
-      title: '',
-      text: '',
-      isComplete: false,
-    });
-    const goList = () => {
-      router.push('/list')
-    };
-    const getData = (id) => {
-      axios.get(url + id).then((result) => {
-        console.log(result.data);
-        data.json_data = result.data;
-      })
-      .then(()=>{
-        initData();
+  import router from "@/router";
+  import axios from "axios";
+  import { reactive, onMounted } from "vue";
+  
+  let url = "https://localhost:5001/api/todoitems/";
+  
+  export default {
+    props: {
+      chosenId: {
+        type: Number,
+        default: 0
+      }
+    },
+    setup(props) {
+      const data = reactive({
+        json_data: null,
+        title: '',
+        text: '',
+        isComplete: false,
+        created: '',
+        modified: '',
       });
-    };
-    const initData = () => {
-      data.title = data.json_data ? data.json_data.title : '---';
-      data.text = data.json_data ? data.json_data.text : '---';
-      data.isComplete = data.json_data ? data.json_data.isComplete : '---';
-    };
-    const putData = (id) => {
-      axios.put(url + id,{
-        id: props.chosenId,
-        title: data.title,
-        text : data.text,
-        isComplete: data.isComplete,
-      })
-      .then(function (response) {
-        // handle success
-        console.log(response);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .finally(function () {
-        // always executed
-      })
-      .then(()=>{
-        goList();
+      const goList = () => {
+        router.push('/list')
+      };
+      const getData = async (id) => {
+        await axios
+        .get(url + id)
+        .then((res) => {
+          console.log("result.data",res.data);
+          data.json_data = res.data;
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        .then(()=>{
+          initData();
+        });
+      };
+      const initData = () => {
+        data.title = data.json_data ?  data.json_data[0].TodoTitle : '---';
+        data.text = data.json_data ? data.json_data[0].TodoText : '---';
+        data.isComplete = data.json_data ? data.json_data[0].IsComplete : '---';
+        data.created = data.json_data ? data.json_data[0].Created : "---";
+        data.modified = data.json_data ? data.json_data[0].Modified : "---";
+      };
+      const putData = (id) => {
+        axios.put(url + id,{
+          TodoTitle : data.title,
+          TodoText : data.text,
+          IsComplete : data.isComplete,
+        })
+        .then(function (response) {
+          // handle success
+          console.log(response);
+        })
+        .catch(function (error) {
+          // handle error
+          console.log(error);
+        })
+        .finally(function () {
+          // always executed
+        })
+        .then(()=>{
+          goList();
+        });
+      };
+      onMounted(() => {
+        let i = props.chosenId;
+        getData(i);
       });
-    };
-    onMounted(() => {
-      let i = props.chosenId
-      getData(i);
-    });
-    return { data, getData, putData, goList };
-  },
-};
-</script> 
-<Style></Style>
+      return { data, getData, putData, goList };
+    },
+  };
+  </script> 
+  <Style></Style>

@@ -21,16 +21,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="todo in post" :key="todo.id" @from-child="goDetail()" class="todoitems">
-                        <td><div class="ellipsis">{{ todo ? todo.title : "---" }}</div></td>
-                        <td><div class="ellipsis">{{ todo ? todo.text : "---" }}</div></td>
-                        <td><div class="">{{ todo ? todo.created : "---" }}</div></td>
-                        <td><div class="ellipsis">{{ todo ? todo.modified : "---" }}</div></td>
-                        <td>{{ todo ? todo.isComplete : "---" }}</td>
+                    <tr v-for="todo in post" :key="todo.TodoItemId" @from-child="goDetail()" class="todoitems">
+                        <td><div class="ellipsis">{{ todo ? todo.TodoTitle : "---" }}</div></td>
+                        <td><div class="ellipsis">{{ todo ? todo.TodoText : "---" }}</div></td>
+                        <td><div class="">{{ todo ? todo.Created : "---" }}</div></td>
+                        <td><div class="ellipsis">{{ todo ? todo.Modified : "---" }}</div></td>
+                        <td>{{ todo ? todo.IsComplete : "---" }}</td>
                         <td>
                             <div class="todoitems_edit">
-                                <button @click="removeTodo(todo.id)">削除</button> |
-                                <button @click="goDetail(todo.id)">編集</button>
+                                <button @click="removeTodo(todo.TodoItemId)">削除</button> |
+                                <button @click="goDetail(todo.TodoItemId)">編集</button>
                             </div>
                         </td>
                     </tr>
@@ -75,6 +75,7 @@ export default defineComponent({
                 .then(json => {
                     this.post = json;
                     this.loading = false;
+                    console.log(json);
                     return;
                 });
         },
@@ -100,7 +101,6 @@ export default defineComponent({
             let i = id;
             this.$router.push({name:'detail', params: {chosenId: i}})
             .catch(()=>{});
-            console.log(i);
         }
     },
 });

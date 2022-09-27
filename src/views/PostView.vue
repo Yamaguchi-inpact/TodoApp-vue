@@ -27,9 +27,8 @@ let url = "https://localhost:5001/api/todoitems/";
       const postData = () => {
           axios
           .post(url, {
-            title: data.title,
-            text: data.text,
-            isComplete: false,
+            TodoTitle: data.title,
+            TodoText: data.text,
           })
           .then((res) => {
             console.log(res);

@@ -15,11 +15,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="forecast in post" :key="forecast.date">
-                        <td>{{ forecast.date }}</td>
-                        <td>{{ forecast.temperatureC }}</td>
-                        <td>{{ forecast.temperatureF }}</td>
-                        <td>{{ forecast.summary }}</td>
+                    <tr v-for="forecast in post" :key="forecast.Date">
+                        <td>{{ forecast.Date }}</td>
+                        <td>{{ forecast.TemperatureC }}</td>
+                        <td>{{ forecast.TemperatureF }}</td>
+                        <td>{{ forecast.Summary }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -56,6 +56,7 @@
                     .then(json => {
                         this.post = json;
                         this.loading = false;
+                        console.log(json);
                         return;
                     });
             }
