@@ -1,9 +1,6 @@
 <template>
-  <div class="about">
-    <h1>Todo Detail</h1>
-  </div>
   <section class="alert alert-primary">
-    <h1>Axios</h1>
+    <h1>UpdateTodo</h1>
     <p>{{data}}</p>
     <table class="table table-light table-striped">
       <tbody class="text-start">
@@ -57,7 +54,7 @@
         modified: '',
       });
       const goList = () => {
-        router.push('/list')
+        router.push('/')
       };
       const getData = async (id) => {
         await axios
