@@ -24,6 +24,10 @@
           <th>IsComplete</th>
           <td><input type="checkbox" v-model="data.isComplete" /></td>
         </tr>
+        <tr>
+          <th>Category</th>
+          <td><input type="number" v-model="data.categoryId" /></td>
+        </tr>
       </tbody>
     </table>
     <button @click="putData(chosenId)">更新</button>
@@ -50,6 +54,7 @@
         title: '',
         text: '',
         isComplete: false,
+        categoryId: 0,
         created: '',
         modified: '',
       });
@@ -71,9 +76,10 @@
         });
       };
       const initData = () => {
-        data.title = data.json_data ?  data.json_data[0].TodoTitle : '---';
-        data.text = data.json_data ? data.json_data[0].TodoText : '---';
-        data.isComplete = data.json_data ? data.json_data[0].IsComplete : '---';
+        data.title = data.json_data ?  data.json_data[0].TodoTitle : '';
+        data.text = data.json_data ? data.json_data[0].TodoText : '';
+        data.isComplete = data.json_data ? data.json_data[0].IsComplete : false ;
+        data.categoryId = data.json_data ? data.json_data[0].CategoryId : 0 ;
         data.created = data.json_data ? data.json_data[0].Created : "---";
         data.modified = data.json_data ? data.json_data[0].Modified : "---";
       };

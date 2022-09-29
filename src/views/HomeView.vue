@@ -12,7 +12,7 @@
             <div class="overlay" v-show="showContent[0]">
               <div class="content">
                 <AddTodo />
-                <button v-on:click="closeModal">Close</button>
+                <button class="button" v-on:click="closeModal">Close</button>
               </div>
             </div>
           </div>

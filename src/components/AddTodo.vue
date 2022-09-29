@@ -4,10 +4,12 @@
     <div class="form">
       <p>タイトル</p>
       <input v-model="data.title" />
+      <p>カテゴリー</p>
+      <input type="number" v-model="data.categoryId" />
       <p>テキスト</p>
       <textarea v-model="data.text"></textarea>
       <button type="button" @click="postData()">送信</button>
-    </div>
+    </div> 
   </div>
 </template>
 <script>
@@ -21,12 +23,14 @@ let url = "https://localhost:5001/api/todoitems/";
       const data = reactive({
           title: "",
           text: "",
+          categoryId: 0,
       });
       const postData = () => {
           axios
           .post(url, {
             TodoTitle: data.title,
             TodoText: data.text,
+            categoryId: data.categoryId,
           })
           .then((res) => {
             console.log(res);
