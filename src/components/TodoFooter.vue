@@ -1,6 +1,6 @@
 <template>
-<div class="header">
-<div class="title">TodoList</div>
+<div class="footer">
+<p>Footer</p>
 </div>
 </template>
 
@@ -10,7 +10,7 @@ export default {
 </script>
 
 <style scoped>
-.header {
+.footer {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -18,12 +18,9 @@ export default {
   color: #2c3e50;
   background-color: #5cb389;
 
-      /* top: 0;
-      left: 0; */
+      bottom: 0;
+      left: 0;
+      height: 3em;
       width: 100%;
 }
-.title {
-  display: block;
-  font-size: 2em;
-} 
 </style>

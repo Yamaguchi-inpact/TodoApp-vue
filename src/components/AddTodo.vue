@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="addTodo">
     <h1>Add Todo</h1>
     <div class="form">
       <p>タイトル</p>
@@ -47,16 +47,20 @@ let url = "https://localhost:5001/api/todoitems/";
 };
 </script>
 <style scoped>
-  .wrap{
-    text-align: center;
-  }
-    .form {
-        display: flex;
-        flex-direction: column;
-        
-        width: 80%;
-        margin: 0 auto;
-        max-width: 500px;
-      }
-      
+.addTodo{
+  text-align: center;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  
+  width: 80%;
+  margin: 0 auto;
+  max-width: 500px;
+}
+textarea {
+  resize: none;
+  height: 10em;
+}
+    
 </style>
