@@ -6,7 +6,7 @@
       <input v-model="data.title" />
       <p>カテゴリー</p>
       <select v-model="data.categoryId">
-        <option disabled value= "">Categories</option>
+        <option disabled value= null>Categories</option>
         <option v-for="cate in data.json_data" 
           :value="cate.CategoryId" 
           :key="cate.CategoryId">
@@ -32,7 +32,7 @@ let url = "https://localhost:5001/api";
         json_data : null,
         title: "",
         text: "",
-        categoryId : 0,
+        categoryId : null,
       });
       const getData = async () => {
         await axios
@@ -49,7 +49,7 @@ let url = "https://localhost:5001/api";
         });
       };
       const initData = () => {
-        data.categoryId = data.json_data ? data.json_data[0].CategoryId : 0 ;
+        data.categoryId = data.json_data ? data.json_data[0].CategoryId : null ;
       };
       const postData = () => {
           axios

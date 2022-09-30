@@ -26,7 +26,14 @@
         </tr>
         <tr>
           <th>Category</th>
-          <td><input type="number" v-model="data.categoryId" /></td>
+          <select v-model="data.categoryId">
+            <option disabled value= null>Categories</option>
+            <option v-for="cate in data.json_data_c" 
+              :value="cate.CategoryId" 
+              :key="cate.CategoryId">
+              {{ cate.CategoryName }}
+            </option>
+          </select>
         </tr>
       </tbody>
     </table>
@@ -39,7 +46,7 @@
   import axios from "axios";
   import { reactive, onMounted } from "vue";
   
-  let url = "https://localhost:5001/api/todoitems/";
+  let url = "https://localhost:5001/api";
   
   export default {
     props: {
@@ -51,10 +58,11 @@
     setup(props) {
       const data = reactive({
         json_data: null,
+        json_data_c: null,
         title: '',
         text: '',
         isComplete: false,
-        categoryId: 0,
+        categoryId: null,
         created: '',
         modified: '',
       });
@@ -63,7 +71,7 @@
       };
       const getData = async (id) => {
         await axios
-        .get(url + id)
+        .get(`${url}/todoitems/${id}`)
         .then((res) => {
           console.log("result.data",res.data);
           data.json_data = res.data;
@@ -74,12 +82,21 @@
         .then(()=>{
           initData();
         });
+        await axios
+        .get(`${url}/category`)
+        .then((r) => {
+          console.log("category.data",r.data);
+          data.json_data_c = r.data;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
       };
       const initData = () => {
         data.title = data.json_data ?  data.json_data[0].TodoTitle : '';
         data.text = data.json_data ? data.json_data[0].TodoText : '';
         data.isComplete = data.json_data ? data.json_data[0].IsComplete : false ;
-        data.categoryId = data.json_data ? data.json_data[0].CategoryId : 0 ;
+        data.categoryId = data.json_data ? data.json_data[0].CategoryId : null ;
         data.created = data.json_data ? data.json_data[0].Created : "---";
         data.modified = data.json_data ? data.json_data[0].Modified : "---";
       };
