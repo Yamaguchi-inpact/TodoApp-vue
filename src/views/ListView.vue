@@ -21,7 +21,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="todo in post" :key="todo.TodoItemId" @from-child="goDetail()" class="todoitems">
+                    <tr v-for="todo in post" :key="todo.TodoItemId" class="todoitems">
                         <td><div class="ellipsis">{{ todo ? todo.TodoTitle : "---" }}</div></td>
                         <td><div class="ellipsis">{{ todo ? todo.TodoText : "---" }}</div></td>
                         <td><div class="">{{ todo ? todo.Created : "---" }}</div></td>

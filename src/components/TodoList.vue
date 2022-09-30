@@ -1,14 +1,14 @@
-<template>
+<template lang="html">
     <!--<img alt="Vue logo" src="@/assets/logo.png">-->
     <div class="post">
         <div class="about">
             <h1>TodoList</h1>
         </div>
-        <div v-if="loading" class="loading">
+        <div v-if="data.loading" class="loading">
             Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationvue">https://aka.ms/jspsintegrationvue</a> for more details.
         </div>
 
-        <div v-if="post" class="content">
+        <div v-if="data.json_data" class="content">
             <table border="1" class="todo">
                 <thead>
                     <tr>
@@ -21,11 +21,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="todo in post" :key="todo.TodoItemId" @from-child="goDetail()" class="todoitems">
+                    <tr v-for="todo in reverseItems" :key="todo.TodoItemId" class="todoitems">
                         <td><div class="ellipsis">{{ todo ? todo.TodoTitle : "---" }}</div></td>
                         <td><div class="ellipsis">{{ todo ? todo.TodoText : "---" }}</div></td>
-                        <td><div class="">{{ todo ? todo.Created : "---" }}</div></td>
-                        <td><div class="ellipsis">{{ todo ? todo.Modified : "---" }}</div></td>
+                        <td><div class="ellipsis">{{ todo ? todo.Created : "---" }}</div></td>
+                        <td><div class="">{{ todo ? todo.Modified : "---" }}</div></td>
                         <td>{{ todo ? todo.IsComplete : "---" }}</td>
                         <td>
                             <div class="todoitems_edit">
@@ -40,66 +40,60 @@
 
     </div>
 </template>
-
 <script lang="js">
     import axios from 'axios';
-    import { defineComponent } from 'vue';
+    import router from '@/router'
+    import { defineComponent, reactive, computed, onMounted } from 'vue';
 
-let url ="https://localhost:5001/api/todoitems/";
+    
+    let url ="https://localhost:5001/api";
 
 export default defineComponent({
-    data() {
-        return {
+    setup() {
+        const data = reactive ({
             loading: false,
-            post: null,
-        };
-    },
-    created() {
-        // fetch the data when the view is created and the data is
-        // already being observed
-        this.fetchData();
-    },
-    watch: {
-        // call again the method if the route changes
-        '$route': 'fetchData'
-    },
-    methods: {
-        fetchData: function() {
-            this.post = null;
-            this.loading = true;
+            json_data: null
+        });
+        const getData = async () => {
+            data.loading = true;
+            data.json_data = null;
 
-            fetch(url)
-                .then(r => r.json())
-                .then(json => {
-                    this.post = json;
-                    this.loading = false;
-                    console.log(json);
-                    return;
-                });
-        },
-        removeTodo: function(id) {
-            axios.delete(url + id)
-            .then(function (response) {
+            await axios
+            .get(`${url}/todoitems`)
+            .then((r) => {
+                console.log("r.data",r.data);
+                data.json_data = r.data;
+            })
+            .then(() => {
+                data.loading = false;
+            });
+        };
+        const removeTodo = ((id) =>{
+            axios.delete(`${url}/todoitems/${id}`)
+            .then((r) => {
                 // handle success
-                console.log(response);
+                console.log(r);
             })
-            .catch(function (error) {
+            .catch((e) => {
                 // handle error
-                console.log(error);
-            })
-            .finally(function () {
-                // always executed
-                
+                console.log(e);
             })
             .then(()=>{
-                this.fetchData();
+                getData();
             });
-        },
-        goDetail: function(id) {
+        });
+        const goDetail = (id) => {
             let i = id;
-            this.$router.push({name:'detail', params: {chosenId: i}})
-            .catch(()=>{});
-        }
+            router.push({name:'detail', params: {chosenId: i}})
+        };
+        let reverseItems = computed(() => {
+        // 配列の要素順番を逆順にする
+              return  data.json_data.slice().reverse()
+        });
+        onMounted(() => {
+        getData();
+      });
+    return { data, removeTodo, goDetail, reverseItems };
     },
 });
 </script>

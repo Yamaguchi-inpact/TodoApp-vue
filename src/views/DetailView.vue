@@ -88,6 +88,7 @@
           TodoTitle : data.title,
           TodoText : data.text,
           IsComplete : data.isComplete,
+          CategoryId : data.categoryId
         })
         .then(function (response) {
           // handle success

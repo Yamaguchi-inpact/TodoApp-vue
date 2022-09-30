@@ -5,7 +5,14 @@
       <p>タイトル</p>
       <input v-model="data.title" />
       <p>カテゴリー</p>
-      <input type="number" v-model="data.categoryId" />
+      <select v-model="data.categoryId">
+        <option disabled value= "">Categories</option>
+        <option v-for="cate in data.json_data" 
+          :value="cate.CategoryId" 
+          :key="cate.CategoryId">
+        {{ cate.CategoryName }}
+        </option>
+      </select>
       <p>テキスト</p>
       <textarea v-model="data.text"></textarea>
       <button type="button" @click="postData()">送信</button>
@@ -15,22 +22,41 @@
 <script>
 import axios from 'axios'
 import router from '@/router'
-import { reactive } from "vue";
-let url = "https://localhost:5001/api/todoitems/";
+import { reactive, onMounted } from "vue";
+let url = "https://localhost:5001/api";
+
 
   export default {
     setup() {
       const data = reactive({
-          title: "",
-          text: "",
-          categoryId: 0,
+        json_data : null,
+        title: "",
+        text: "",
+        categoryId : 0,
       });
+      const getData = async () => {
+        await axios
+        .get(`${url}/category`)
+        .then((res) => {
+          console.log("category.data",res.data);
+          data.json_data = res.data;
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        .then(()=>{
+          initData();
+        });
+      };
+      const initData = () => {
+        data.categoryId = data.json_data ? data.json_data[0].CategoryId : 0 ;
+      };
       const postData = () => {
           axios
-          .post(url, {
+          .post(`${url}/todoitems`, {
             TodoTitle: data.title,
             TodoText: data.text,
-            categoryId: data.categoryId,
+            CategoryId: data.categoryId,
           })
           .then((res) => {
             console.log(res);
@@ -46,6 +72,9 @@ let url = "https://localhost:5001/api/todoitems/";
       const goList = () => {
         router.push('/list');
       };
+      onMounted(() => {
+        getData();
+      });
     return { data, postData, goList };
   },
 };

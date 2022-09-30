@@ -86,7 +86,7 @@ export default {
   }
 
   .form_button {
-    height:15%;
+    height:5%;
     background: #c5e5da;
   }
   .button_wrap {
